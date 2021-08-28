@@ -1,0 +1,26 @@
+Sensors:
+- p: energy consumption rate
+- Emax: maximum battery capacity 
+- Emin: minimum operation 
+- einit: residual energy at beginning of the charging cycle 
+
+MC:
+- EMC: max energy capacity 
+- PM: energy consumption rate
+- U: charging rate 
+- V: vel 
+
+
+Out: 
+- charging path is the subset of all sensors 
+- correstpodning charging time 
+
+Obj: 
+ - minimize: 
+    +The number of dead node sensors 
+    +Maximum energy reduction of sensors 
+
+Constrains: 
+ - Total energy of MC travelling (EMove) and MC charging (Echarge)  <= EMC 
+ - Energy sensor level <= Emax  (equa 9)
+ - Charging time at each sensor >= 0 
