@@ -46,7 +46,7 @@ def generate_logger(inputFileDir):
     fileLogName = f'result/{inputFileName}/{inputFileName}.log'
 
     formatter = logging.Formatter('%(message)s')
-    file_handler = logging.FileHandler(fileLogName)
+    file_handler = logging.FileHandler(fileLogName, mode = "w")
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
     
