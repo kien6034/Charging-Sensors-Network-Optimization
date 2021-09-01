@@ -16,23 +16,7 @@ class GWO:
         self.init_cweights= cweights[1:-1]
         self.e_charge = (E_MC - self.emove) 
         self.travel_times = self.get_travel_times(routes)
-        #self.generate_logger(self.graph.fileName)
         self.nodes_data = self.get_node_data(self.routes)
-    
-    # def generate_logger(self, inputFileDir):
-    #     inputFileName = inputFileDir.split("/")[-1].replace('.txt', '')
-
-    #     if not path.exists(f'result/{inputFileName}'):
-    #         mkdir(f'result/{inputFileName}')
-        
-    #     fileLogName = f'result/{inputFileName}/{inputFileName}.log'
-
-    #     formatter = logging.Formatter('%(message)s')
-    #     file_handler = logging.FileHandler(fileLogName)
-    #     file_handler.setFormatter(formatter)
-
-    #     logger.addHandler(file_handler)
-       
     
     def get_travel_times(self, routes):
         travel_times = np.zeros((routes.size - 2), dtype=np.float64)
@@ -63,12 +47,9 @@ class GWO:
     def fitness(self, idv, logger = None): 
         num_deaths= 0 #max number of death sensor
         max_er = 0 # max energy reduction
-
-        
         t_charge = idv * (self.e_charge / U)
 
         T = t_charge.sum() + self.emove / P_M #time to finish charging cycle
-
         if logger:
             logger.info(f"routes: {self.routes}")
             logger.info(f"t_charge: {t_charge}")  
@@ -134,7 +115,6 @@ class GWO:
             e_remain = self.graph.nodes[self.routes[i], 3] - t * self.graph.nodes[self.routes[i], 2] #eq3: eint - t * pi
 
             ub = (E_MAX - e_remain) / (U - self.graph.nodes[self.routes[i], 2]) *  U / self.e_charge #upper bound of idv: max_t_time / total_charge_time
-
             if idv[i] < 0 or e_remain < E_MIN:
                 idv[i] = 0
             elif idv[i] > ub:

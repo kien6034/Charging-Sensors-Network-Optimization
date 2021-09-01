@@ -11,14 +11,14 @@ f_input = {
     'input_url': "small-net/grid/base_station_(250.0, 250.0)/",
     'distribution': 'gr',
     'num_nodes': [25, 50, 75, 100], 
-    'file_nums': [1, 2, 3, 4, 5, 6 ,7, 8, 9 , 10]
+    'file_nums': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 }
 
 #upper params 
 u_params = {
     'max_iter': 50,
     'pop_size': 30, 
-    'create_sample': True
+    'create_sample': "txt"
 }
 
 #lower params

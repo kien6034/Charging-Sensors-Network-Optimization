@@ -65,26 +65,51 @@ class ACO:
         for i in range(1, best_route.size):
             self.pheromones[best_route[i-1], best_route[i]] *= (1 + DEPOSIT_RATE)
 
-    def save_low_input(self, routes, cweights, f, E_Move, num_deaths, max_er):
+    def save_low_input(self, routes, cweights, f, E_Move, num_deaths, max_er, create_sample):
         fileDir = self.graph.fileName
 
         xs = fileDir.split("/")
         fileName = xs[-1].replace('.txt', '')
 
         expected_dir = f"low_input/{fileName}"
+        expected_dir_npy = expected_dir + "/npy"
+        
         if not path.exists(expected_dir):
             mkdir(expected_dir)
         
+        if not path.exists(expected_dir_npy):
+            mkdir(expected_dir_npy)
+ 
         
-        np.save(f"{expected_dir}/routes", routes)
-        np.save(f"{expected_dir}/cweights", cweights)
-        np.save(f"{expected_dir}/f", f)
-        np.save(f"{expected_dir}/emove", E_Move)
-        np.save(f"{expected_dir}/num_deaths", num_deaths)
-        np.save(f"{expected_dir}/max_er", max_er)
+        np.save(f"{expected_dir_npy}/routes", routes)
+        np.save(f"{expected_dir_npy}/cweights", cweights)
+        np.save(f"{expected_dir_npy}/f", f)
+        np.save(f"{expected_dir_npy}/emove", E_Move)
+
+
+        if create_sample == "txt":
+            expected_dir_txt = expected_dir + "/txt"
+            if not path.exists(expected_dir_txt):
+                mkdir(expected_dir_txt)
+            
+            file1 = open(f"{expected_dir_txt}/routes.txt","w")
+            for route in routes:
+                file1.write(str(route))
+                file1.write("\t")
+            file1.write("\n")
+            for c_weight in cweights:
+                file1.write(str(c_weight))
+                file1.write("\t")
+            file1.write("\n")
+            file1.write(str(E_Move))
+            file1.write("\n")
+            file1.write(str(f))
+           
+
+            file1.close()
         print(f"input for {fileName} is created")
 
-    def run(self, create_sample):
+    def run(self, create_sample=None):
         #init pheromone 
         self.pheromones = self.init_pheromone()
         #print(f"ACO pheromone mattrix initialized with the shape of {self.pheromones.shape} and init value {MIN_PHEROMONE}")
@@ -109,7 +134,7 @@ class ACO:
                 ant.update_local_pheromone(pheromones, routes)
                 
                 if create_sample:
-                    self.save_low_input(routes, appx_cweights, f, E_Move, num_deaths, max_er)
+                    self.save_low_input(routes, appx_cweights, f, E_Move, num_deaths, max_er, create_sample)
                     return 0
 
                 #update best fitness

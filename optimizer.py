@@ -15,7 +15,7 @@ def read_low_data(graph):
     fileDir = graph.fileName
     xs = fileDir.split("/")
     fileName = xs[-1].replace('.txt', '')
-    expected_dir = f"low_input/{fileName}"
+    expected_dir = f"low_input/{fileName}/npy"
 
     if not path.exists(expected_dir):
         print("Data is not created! Please run the upper level first to get the test data")
@@ -25,9 +25,8 @@ def read_low_data(graph):
     cweights = np.load(f"{expected_dir}/cweights.npy")
     f = np.load(f"{expected_dir}/f.npy")
     e_move = np.load(f"{expected_dir}/emove.npy")
-    num_deaths = np.load(f"{expected_dir}/num_deaths.npy")
-    max_er = np.load(f"{expected_dir}/max_er.npy")
-    return routes, cweights, f, e_move, num_deaths, max_er
+    
+    return routes, cweights, f, e_move
 
 def create_output_folder(inputDir):
     inputFileName = inputDir.split("/")[-1].replace('.txt', '')
@@ -118,9 +117,9 @@ def run(run_type, f_input, u_params, l_params, export_flags):
                
             if level == "upper": #run upper
                 upper = ACO(graph)
-                upper.run(create_sample = True)
+                upper.run(create_sample = u_params['create_sample'])
             elif level == "lower":
-                routes, cweights, f, emove, num_deaths, max_er = read_low_data(graph)
+                routes, cweights, f, emove = read_low_data(graph)
                 lower = GWO(graph, routes, cweights, emove)
                 idv, f, num_deaths, max_er, f_details, run_time = lower.run(l_params)
                 total_run_times += run_time
